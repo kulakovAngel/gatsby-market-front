@@ -5,7 +5,11 @@ import Img from 'gatsby-image';
 import Layout from '../components/layout';
 
 const IndexPage = ({ data }) => (
-  <Layout>
+  <Layout
+    seo={{
+      description: 'React Market',
+      keywords: 'React, Market',
+  }}>
     <h1>Market</h1>
     <ul>
       {

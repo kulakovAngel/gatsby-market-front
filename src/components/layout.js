@@ -1,50 +1,27 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
+import React from 'react';
+import { useStaticQuery, graphql } from 'gatsby';
+import Helmet from 'react-helmet';
+//import styled, { createGlobalStyle } from "styled-components";
 
-import React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import Header from './header';
+//import { STYLE } from './../consts';
 
-import Header from "./header"
-import "./layout.css"
+const Layout = ({ seo = {}, children }) => (
+  <>
+    <Helmet>
+      <title>{ `Houses for sale${seo.title ? ' - ' + seo.title : ''}` }</title>
+      <meta name='description' content={seo.description} />
+      <meta name='keywords' content={seo.keywords} />
+    </Helmet>
+    <Header />
+    <main>{ children }</main>
+    <footer>
+      © { new Date().getFullYear() }
+      <div>{`https://strapi.io/blog/building-a-static-website-using-gatsby-and-strapi/`}</div>
+    </footer>
+  </>
+);
 
-const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
+export default Layout;
 
-  return (
-    <>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}
-          <div>{`https://strapi.io/blog/building-a-static-website-using-gatsby-and-strapi/`}</div>
-        </footer>
-      </div>
-    </>
-  )
-}
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
-
-export default Layout
+//<GlobalStyle />
