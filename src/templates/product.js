@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { Link, graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import Img from 'gatsby-image'
@@ -11,6 +11,11 @@ const ProductTemplate = ({ data }) => (
     { data.strapiProducts.description }
     { data.strapiProducts.cost }
     <Img fixed={ data.strapiProducts.image.childImageSharp.fixed } />
+    {
+      data.strapiProducts.categories.map(tag => (
+        <Link to={`/${tag.title}`}>{ tag.title }</Link>
+      ))
+    }
   </Layout>
 )
 
@@ -23,6 +28,9 @@ export const pageQuery = graphql`
       title
       cost
       description
+      categories {
+        title
+      }
       image {
         childImageSharp {
           fixed(width: 200, height: 125) {

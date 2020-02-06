@@ -16,8 +16,14 @@ const IndexPage = ({ data }) => (
         data.allStrapiProducts.edges.map(product => (
           <li key={ product.node.id }>
             <article>
-              <Link to={`/${product.node.id}`}><h2>{ product.node.title }</h2></Link>
+              <Link to={`/${product.node.categories[0].title}/${product.node.id}`}><h2>{ product.node.title }</h2></Link>
               <Img fixed={ product.node.image.childImageSharp.fixed } />
+              <p>{ product.node.categories.title }</p>
+              {
+                product.node.categories.map(item => (
+                  <span style={{border: '1px solid'}}>{item.title}</span>
+                ))
+              }
             </article>
           </li>
         ))
@@ -37,7 +43,10 @@ export const pageQuery = graphql`
           title
           cost
           description
-          image_name
+          categories {
+            title
+            description
+          }
           image {
             childImageSharp {
               fixed(width: 200, height: 125) {

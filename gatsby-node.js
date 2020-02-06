@@ -31,6 +31,11 @@ exports.createPages = ({ actions, graphql }) => {
         edges {
           node {
             id
+            title
+            categories {
+              title
+              id
+            }
           }
         }
       }
@@ -38,16 +43,42 @@ exports.createPages = ({ actions, graphql }) => {
     `).then(result => {
     // Create pages for each product.
     result.data.allStrapiProducts.edges.forEach(({ node }) => {
+//      if (node.categories[0].title === 'fresh bakery')
+        for(let i=0; i<node.categories.length; i++) {
+          createPage({
+            path: `/${node.categories[i].title}/${node.title}`,
+            component: path.resolve(`src/templates/product.js`),
+            context: {
+              id: node.id,
+            },
+          })
+        }
+    })
+  });
+  
+  const getCategories = makeRequest(graphql, `
+    {
+      allStrapiCategories {
+        edges {
+          node {
+            id
+            title
+          }
+        }
+      }
+    }
+    `).then(result => {
+    // Create pages for each category.
+    result.data.allStrapiCategories.edges.forEach(({ node }) => {
       createPage({
-        path: `/${node.id}`,
-        component: path.resolve(`src/templates/product.js`),
+        path: `/${node.title}`,
+        component: path.resolve(`src/templates/category.js`),
         context: {
           id: node.id,
         },
       })
     })
   });
-  
-  // Query for articles nodes to use in creating pages.
-  return getProducts;
+  // Query for products nodes to use in creating pages.
+  return Promise.all([getProducts, getCategories]);
 };

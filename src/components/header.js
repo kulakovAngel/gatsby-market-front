@@ -32,7 +32,7 @@ const Header = () => (
             <li><Link to='/'>Home</Link></li>
             {
               data.allStrapiCategories.edges.map(category => (
-                <li><Link to={`/${category.node.id}`}>{category.node.title}</Link></li>
+                <li><Link to={`/${category.node.title}`}>{category.node.title}</Link></li>
               ))
             }
             <li><Link to='/about'>About</Link></li>
