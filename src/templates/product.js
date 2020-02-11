@@ -16,6 +16,12 @@ const ProductTemplate = ({ data }) => (
         <Link to={`/${tag.title}`}>{ tag.title }</Link>
       ))
     }
+    <button>В корзину!</button>
+    <form>
+        <input />
+        <input />
+        <input />
+    </form>
   </Layout>
 )
 
