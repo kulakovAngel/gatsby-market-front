@@ -1,15 +1,17 @@
 import { createStore as reduxCreateStore } from 'redux';
 
 const reducer = (state = [], action) => {
+  const [ ...newState ] = state;
   switch (action.type) {
     
     case 'ADD_ITEM_TO_CART':
-      const [ ...newState ] = state;
       newState.push(action.payload);
       return newState;
     
     case 'REMOVE_ITEM_FROM_CART':
-      break;
+      let index = state.findIndex(item => item.id === action.payload);
+      newState.splice(index, 1);
+      return newState;
     
     case 'EMPTY_CART':
       return [];

@@ -2,10 +2,8 @@ import React from 'react';
 import { Link, StaticQuery, graphql } from 'gatsby';
 
 import CartComponent from '../components/cart-component';
-//https://www.gatsbyjs.org/docs/static-query/
-//https://www.gatsbyjs.org/docs/use-static-query/
 
-const Header = () => (
+const Header = ({ title }) => (
   <StaticQuery
     query={graphql`
       query CategoriesQuery {
@@ -15,25 +13,21 @@ const Header = () => (
               id
               title
               description
+              slug
             }
-          }
-        }
-        site {
-          siteMetadata {
-            title
           }
         }
       }
     `}
     render={data => (
       <header>
-        <h1>{ data.site.siteMetadata.title }</h1>
+        <h1>{ title }</h1>
         <nav>
           <ul>
             <li><Link to='/'>Home</Link></li>
             {
               data.allStrapiCategories.edges.map(category => (
-                <li><Link to={`/${category.node.title}`}>{category.node.title}</Link></li>
+                <li><Link to={`/${category.node.slug}`}>{category.node.title}</Link></li>
               ))
             }
             <li><Link to='/about'>About</Link></li>
