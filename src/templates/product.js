@@ -1,9 +1,10 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link, graphql } from 'gatsby';
+import Img from 'gatsby-image';
 
-import Layout from "../components/layout"
-import Img from 'gatsby-image'
-
+import Layout from '../components/layout';
+import AddToCartForm from '../components/add-to-cart-form';
 
 const ProductTemplate = ({ data }) => (
   <Layout>
@@ -17,11 +18,7 @@ const ProductTemplate = ({ data }) => (
       ))
     }
     <button>В корзину!</button>
-    <form>
-        <input />
-        <input />
-        <input />
-    </form>
+    <AddToCartForm { ...data.strapiProducts } />
   </Layout>
 )
 

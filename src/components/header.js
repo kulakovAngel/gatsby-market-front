@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, StaticQuery, graphql } from 'gatsby';
 
+import CartComponent from '../components/cart-component';
 //https://www.gatsbyjs.org/docs/static-query/
 //https://www.gatsbyjs.org/docs/use-static-query/
 
@@ -38,6 +39,7 @@ const Header = () => (
             <li><Link to='/about'>About</Link></li>
           </ul>
         </nav>
+        <CartComponent />
       </header>
     )}
   />
