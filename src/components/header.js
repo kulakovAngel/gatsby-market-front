@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, StaticQuery, graphql } from 'gatsby';
+import { Nav, NavDropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import CartComponent from '../components/cart-component';
 
@@ -14,6 +16,13 @@ const Header = ({ title }) => (
               title
               description
               slug
+              childs {
+                title
+                slug
+              }
+              parents {
+                id
+              }
             }
           }
         }
@@ -23,17 +32,37 @@ const Header = ({ title }) => (
       <header>
         <h1>{ title }</h1>
         <nav>
-          <ul>
-            <li><Link to='/'>Home</Link></li>
+          <Nav>
+            <Nav.Item><Link to='/'>Home</Link></Nav.Item>
             {
-              data.allStrapiCategories.edges.map(category => (
-                <li><Link to={`/${category.node.slug}`}>{category.node.title}</Link></li>
-              ))
+              data.allStrapiCategories.edges.map(category => {
+                if (category.node.childs.length) {
+                  return (
+                    <NavDropdown title={ category.node.title }>
+                      <Link to={`/${ category.node.slug }`}>{ category.node.title }</Link>
+                      <NavDropdown.Divider />
+                        {
+                          category.node.childs.map((sub, i) => (
+                            <Nav.Item>
+                              <Link to={`/${ category.node.slug }/${ sub.slug }`}>{ sub.title }</Link>
+                            </Nav.Item>
+                          ))
+                        }
+                    </NavDropdown>
+                  )
+                } else if (!category.node.parents.length) {
+                  return (
+                    <Nav.Item>
+                      <Link to={`/${ category.node.slug }`}>{ category.node.title }</Link>
+                    </Nav.Item>
+                  )
+                }
+              })
             }
-            <li><Link to='/about'>About</Link></li>
-          </ul>
+            <Nav.Item><Link to='/about'>About</Link></Nav.Item>
+            <Nav.Item><Link to='/cart'>Cart</Link></Nav.Item>
+          </Nav>
         </nav>
-        <CartComponent />
       </header>
     )}
   />

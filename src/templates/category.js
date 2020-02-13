@@ -2,7 +2,7 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 
 import Layout from "../components/layout"
-import Img from 'gatsby-image'
+import ProductItem from "../components/product-item";
 
 
 const CategoryTemplate = ({ data }) => (
@@ -12,17 +12,29 @@ const CategoryTemplate = ({ data }) => (
       description: data.strapiCategories.description,
   }}>
     { data.strapiCategories.description }
-    { data.strapiCategories.cost }
     {
-      data.strapiCategories.products.map(product => (
-        <ul>
-          <li>
-            <Link to={`/${data.strapiCategories.slug}/${product.slug}`}><h2>{ product.title }</h2></Link>
-            <p>{ product.description }</p>
-          </li>
-        </ul>
-      ))
+      data.strapiCategories.childs &&
+      <ul>
+        {
+          data.strapiCategories.childs.map(sub => (
+            <li key={ sub.id }>
+              <Link to={`/${ data.strapiCategories.slug }/${ sub.slug }`}>
+                <h3>{ sub.title }</h3>
+              </Link>
+            </li>
+          ))
+        }
+      </ul>
     }
+    <ul>
+      {
+        data.strapiCategories.products.map(product => (
+          <li key={ product.id }>
+            <ProductItem { ...product } category_slug={ data.strapiCategories.parents.length ? `${data.strapiCategories.parents[0].slug}/${data.strapiCategories.slug}` : data.strapiCategories.slug }/>
+          </li>
+        ))
+      }
+    </ul>
   </Layout>
 )
 
@@ -35,10 +47,28 @@ export const pageQuery = graphql`
       slug
       title
       description
+      childs {
+        id
+        slug
+        title
+      }
+      parents {
+        title
+        slug
+      }
       products {
+        id
         title
         description
+        cost
         slug
+        image {
+          childImageSharp {
+            fixed(width: 200, height: 125) {
+              ...GatsbyImageSharpFixed
+            }
+          }
+        }
       }
     }
   }

@@ -43,15 +43,26 @@ exports.createPages = ({ actions, graphql }) => {
     // Create pages for each product.
     result.data.allStrapiProducts.edges.forEach(({ node }) => {
 //      if (node.categories[0].title === 'fresh bakery')
-        for(let i=0; i<node.categories.length; i++) {
-          createPage({
-            path: `/${node.categories[i].slug}/${node.slug}`,
-            component: path.resolve(`src/templates/product.js`),
-            context: {
-              id: node.id,
-            },
-          })
-        }
+//        for(let i=0; i<node.categories.length; i++) {
+//          createPage({
+//            path: `/${node.categories[i].slug}/${node.slug}`,
+//            component: path.resolve(`src/templates/product.js`),
+//            context: {
+//              id: node.id,
+//            },
+//          })
+//        }
+      let uri = '';
+      for (let i=0; i<node.categories.length; i++) {
+        uri += `/${node.categories[i].slug}`;
+        createPage({
+          path: `${uri}/${node.slug}`,
+          component: path.resolve(`src/templates/product.js`),
+          context: {
+            id: node.id,
+          },
+        })
+      }
     })
   });
   
@@ -62,6 +73,10 @@ exports.createPages = ({ actions, graphql }) => {
           node {
             id
             slug
+            parents {
+              id
+              slug
+            }
           }
         }
       }
@@ -69,8 +84,12 @@ exports.createPages = ({ actions, graphql }) => {
     `).then(result => {
     // Create pages for each category.
     result.data.allStrapiCategories.edges.forEach(({ node }) => {
+      let uri = '';
+      if (node.parents.length) uri = `${node.parents[0].slug}/${node.slug}`;
+      else uri = `${node.slug}`;
+      
       createPage({
-        path: `/${node.slug}`,
+        path: uri,
         component: path.resolve(`src/templates/category.js`),
         context: {
           id: node.id,

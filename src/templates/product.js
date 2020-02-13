@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Link, graphql } from 'gatsby';
 import Img from 'gatsby-image';
 
