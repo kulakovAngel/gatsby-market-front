@@ -1,7 +1,12 @@
 import { Link } from "gatsby";
 import React from "react";
 import Img from 'gatsby-image';
-
+import {
+  Row,
+  Col,
+  Card,
+  Badge,
+} from 'react-bootstrap';
 
 const ProductItem = ({
   id,
@@ -12,13 +17,15 @@ const ProductItem = ({
   category_slug,
 }) => (
   <Link to={`/${ category_slug }/${ slug }`}>
-    <figure>
-      <Img fixed={ image.childImageSharp.fixed } />
-      <figcaption>
-        <h3>{ title }</h3>
-        <span>{ cost } BYN</span>
-      </figcaption>
-    </figure>
+    <Card>
+      <Card.Img variant="top" as={ Img } fluid={ image.childImageSharp.fluid } />
+      <Card.Body>
+        <Card.Title as='h3'>{ title }</Card.Title>
+        <Card.Text>
+          { cost } BYN
+        </Card.Text>
+      </Card.Body>
+    </Card>
   </Link>
 )
 

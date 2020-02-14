@@ -1,6 +1,14 @@
 import React from 'react';
 import { Link, StaticQuery, graphql } from 'gatsby';
-import { Nav, NavDropdown } from 'react-bootstrap';
+import {
+  Nav,
+  NavDropdown,
+  Navbar,
+  Card,
+  Container,
+  Row,
+  Col,
+} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import CartComponent from '../components/cart-component';
@@ -29,41 +37,50 @@ const Header = ({ title }) => (
       }
     `}
     render={data => (
-      <header>
-        <h1>{ title }</h1>
-        <nav>
-          <Nav>
-            <Nav.Item><Link to='/'>Home</Link></Nav.Item>
-            {
-              data.allStrapiCategories.edges.map(category => {
-                if (category.node.childs.length) {
-                  return (
-                    <NavDropdown title={ category.node.title }>
-                      <Link to={`/${ category.node.slug }`}>{ category.node.title }</Link>
-                      <NavDropdown.Divider />
-                        {
-                          category.node.childs.map((sub, i) => (
-                            <Nav.Item>
-                              <Link to={`/${ category.node.slug }/${ sub.slug }`}>{ sub.title }</Link>
+      <Card>
+        <Container fluid>
+          <Row>
+            <Col xs={ 10 }>
+              <Card.Title as='h1'>{ title }</Card.Title>
+                <nav>
+                  <Nav as='ul'>
+                    <Nav.Item as='li'><Nav.Link as={ Link } to='/'>Home</Nav.Link></Nav.Item>
+                    {
+                      data.allStrapiCategories.edges.map(category => {
+                        if (category.node.childs.length) {
+                          return (
+                            <NavDropdown as='li' title={ category.node.title }>
+                              <Nav.Link as={ Link } to={`/${ category.node.slug }`}>{ category.node.title }</Nav.Link>
+                              <NavDropdown.Divider />
+                                {
+                                  category.node.childs.map((sub, i) => (
+                                    <Nav.Item>
+                                      <Nav.Link as={ Link } to={`/${ category.node.slug }/${ sub.slug }`}>{ sub.title }</Nav.Link>
+                                    </Nav.Item>
+                                  ))
+                                }
+                            </NavDropdown>
+                          )
+                        } else if (!category.node.parents.length) {
+                          return (
+                            <Nav.Item as='li'>
+                              <Nav.Link as={ Link } to={`/${ category.node.slug }`}>{ category.node.title }</Nav.Link>
                             </Nav.Item>
-                          ))
+                          )
                         }
-                    </NavDropdown>
-                  )
-                } else if (!category.node.parents.length) {
-                  return (
-                    <Nav.Item>
-                      <Link to={`/${ category.node.slug }`}>{ category.node.title }</Link>
-                    </Nav.Item>
-                  )
-                }
-              })
-            }
-            <Nav.Item><Link to='/about'>About</Link></Nav.Item>
-            <Nav.Item><Link to='/cart'>Cart</Link></Nav.Item>
-          </Nav>
-        </nav>
-      </header>
+                      })
+                    }
+                    <Nav.Item as='li'><Nav.Link as={ Link } to='/about'>About</Nav.Link></Nav.Item>
+                    <Nav.Item as='li'><Nav.Link as={ Link } to='/cart'>Cart</Nav.Link></Nav.Item>
+                  </Nav>
+                </nav>
+            </Col>
+            <Col>
+              <CartComponent />
+            </Col>
+          </Row>
+        </Container>
+      </Card>
     )}
   />
 );

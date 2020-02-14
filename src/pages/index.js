@@ -1,8 +1,16 @@
 import React from 'react';
 import { Link, graphql } from 'gatsby';
 import Img from 'gatsby-image';
+import {
+  Row,
+  Col,
+  Card,
+  Badge,
+} from 'react-bootstrap';
 
 import Layout from '../components/layout';
+import ProductItem from "../components/product-item";
+
 
 const IndexPage = ({ data }) => (
   <Layout
@@ -28,6 +36,41 @@ const IndexPage = ({ data }) => (
         ))
       }
     </ul>
+    {
+      data.strapiCategories.childs &&
+      <Row className="my-5">
+        {
+          data.strapiCategories.childs.map(sub => (
+            <Col key={ sub.id }>
+              <Card>
+                <Card.Body>
+                  <Card.Title>
+                    <Link to={`/${ data.strapiCategories.slug }/${ sub.slug }`}>
+                      { sub.title }
+                    </Link>
+                  </Card.Title>
+                  <Card.Text>
+                    { `${sub.description.slice(0, 150)}...` }
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))
+        }
+      </Row>
+    }
+    {
+      data.allStrapiProducts.edges.length &&
+      <Row className="my-5">
+        {
+          data.allStrapiProducts.edges.map(product => (
+            <Col key={ product.id } sm={ 12 } md={ 4 } xl={ 3 }>
+              <ProductItem { ...product } category_slug={ data.strapiCategories.parents.length ? `${data.strapiCategories.parents[0].slug}/${data.strapiCategories.slug}` : data.strapiCategories.slug }/>
+            </Col>
+          ))
+        }
+      </Row>
+    }
   </Layout>
 );
 
@@ -53,6 +96,22 @@ export const pageQuery = graphql`
                 ...GatsbyImageSharpFixed
               }
             }
+          }
+        }
+      }
+    }
+    allStrapiCategories {
+      edges {
+        node {
+          id
+          title
+          description
+          slug
+          childs {
+            id
+            slug
+            title
+            description
           }
         }
       }

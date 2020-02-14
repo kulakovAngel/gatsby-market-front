@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, graphql } from 'gatsby';
-
+import {
+  Button,
+} from 'react-bootstrap';
 
 const AddToCartForm = ({ productsList, title, cost, id, dispatch }) => {
   function addToCart() {
@@ -16,9 +18,7 @@ const AddToCartForm = ({ productsList, title, cost, id, dispatch }) => {
   }
   
   return (
-    <div>
-      <button onClick={ addToCart }>Добавить в корзину!</button>
-    </div>
+    <Button size="lg" onClick={ addToCart }>Добавить в корзину!</Button>
   );
 };
 

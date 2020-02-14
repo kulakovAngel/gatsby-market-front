@@ -1,5 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {
+  ListGroup,
+  Badge,
+  Button,
+} from 'react-bootstrap';
 
 import Layout from '../components/layout';
 
@@ -23,14 +28,14 @@ const CartProductList = ({ productsList, dispatch }) => {
   return (
     <>
       <p>Товаров в корзине: { productsList.length } (на { totalCost } BYN)</p>
-      <ul>
+      <ListGroup>
         {
           productsList.map(product => (
-            <li>{ product.title }  ({ product.cost } BYN)<span onClick={ removeItem } data-list-item={ product.id }>&times;</span></li>
+            <ListGroup.Item action variant="success">{ product.title }  ({ product.cost } BYN) <Badge variant="danger" onClick={ removeItem } data-list-item={ product.id }>&times;</Badge></ListGroup.Item>
           ))
         }
-      </ul>
-      <button onClick={ emptyCart }>Очистить корзину</button>
+      </ListGroup>
+      <Button onClick={ emptyCart }>Очистить корзину</Button>
     </>
   )
 };

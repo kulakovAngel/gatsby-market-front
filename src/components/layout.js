@@ -1,9 +1,13 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-//import styled, { createGlobalStyle } from "styled-components";
+import {
+  Container,
+  Card,
+} from 'react-bootstrap';
 
 import Header from './header';
-//import { STYLE } from './../consts';
+import './layout.css';
+
 
 const Layout = ({ seo = {}, children }) => (
   <>
@@ -13,13 +17,10 @@ const Layout = ({ seo = {}, children }) => (
       <meta name='keywords' content={seo.keywords} />
     </Helmet>
     <Header title={ seo.title ? seo.title : 'Gatsby Market' } />
-    <main>{ children }</main>
-    <footer>
+    <Container as='main'>{ children }</Container>
+    <Container as='footer' fluid className='bg-dark text-light'>
       © { new Date().getFullYear() }
-    </footer>
+    </Container>
   </>
 );
-
 export default Layout;
-
-//<GlobalStyle />
