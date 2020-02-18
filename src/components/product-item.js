@@ -2,10 +2,7 @@ import { Link } from "gatsby";
 import React from "react";
 import Img from 'gatsby-image';
 import {
-  Row,
-  Col,
   Card,
-  Badge,
 } from 'react-bootstrap';
 
 const ProductItem = ({

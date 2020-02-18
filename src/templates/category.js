@@ -1,14 +1,13 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
+import React from 'react';
+import { Link, graphql } from 'gatsby';
 import {
   Row,
   Col,
   Card,
-  Badge,
 } from 'react-bootstrap';
 
-import Layout from "../components/layout"
-import ProductItem from "../components/product-item";
+import Layout from '../components/layout';
+import ProductItem from '../components/product-item';
 
 
 const CategoryTemplate = ({ data }) => (
@@ -17,7 +16,7 @@ const CategoryTemplate = ({ data }) => (
       title: data.strapiCategories.title,
       description: data.strapiCategories.description,
   }}>
-    <Row className="my-5">
+    <Row className='my-5'>
       <Col>
         <Row>
           { data.strapiCategories.description }
@@ -26,7 +25,7 @@ const CategoryTemplate = ({ data }) => (
     </Row>
     {
       data.strapiCategories.childs &&
-      <Row className="my-5">
+      <Row className='my-5'>
         {
           data.strapiCategories.childs.map(sub => (
             <Col key={ sub.id }>

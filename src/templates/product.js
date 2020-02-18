@@ -17,7 +17,7 @@ const ProductTemplate = ({ data }) => (
       title: data.strapiProducts.title,
       description: data.strapiProducts.description,
   }}>
-    <Row className="my-5">
+    <Row className='my-5'>
       <Col>
         <Row>
           <Card>
@@ -39,9 +39,9 @@ const ProductTemplate = ({ data }) => (
           <Col>
             <h3>Метки:</h3>
             {
-              data.strapiProducts.categories.map(tag => (
-                <Badge variant="info">
-                  <Link to={`/${tag.slug}`}>
+              data.strapiProducts.categories.map((tag, i, arr) => (
+                <Badge variant='info' key={ tag.slug }>
+                  <Link to={i > 0 ? `/${arr[i-1].slug}/${tag.slug}` : `/${tag.slug}`} className='text-light'>
                     { tag.title }
                   </Link>
                 </Badge>
@@ -54,8 +54,8 @@ const ProductTemplate = ({ data }) => (
         <Img fluid={ data.strapiProducts.image.childImageSharp.fluid } />
       </Col>
     </Row>
-    <Row className="my-5">
-      <Col className="d-flex justify-content-end">
+    <Row className='my-5'>
+      <Col className='d-flex justify-content-end'>
         <AddToCartForm { ...data.strapiProducts } />
       </Col>
     </Row>

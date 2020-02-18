@@ -1,15 +1,24 @@
 import React from 'react';
+import {
+  Container,
+  Row,
+  Col,
+} from 'react-bootstrap';
 
 import Layout from '../components/layout';
 
 const AboutPage = () => (
   <Layout
     seo={{
-      title: 'About',
+      title: 'О магазине',
       description: 'About Market',
       keywords: 'About, Market',
   }}>
-    <p>Welcome to page 'About'</p>
+    <Row className="my-5">
+      <Col>
+        <p>Welcome to page 'About'</p>
+      </Col>
+    </Row>
   </Layout>
 );
 

@@ -6,8 +6,6 @@ import {
   Button,
 } from 'react-bootstrap';
 
-import Layout from '../components/layout';
-
 
 const CartProductList = ({ productsList, dispatch }) => {
   function emptyCart() {
@@ -23,18 +21,24 @@ const CartProductList = ({ productsList, dispatch }) => {
     });
   }
   
-  const totalCost = productsList.reduce((res, item) => res += item.cost, 0);
+  const totalCost = productsList.reduce((res, item) => res += (item.cost * item.amount), 0);
+  const totalAmount = productsList.reduce((res, item) => res += item.amount, 0);
   
   return (
     <>
-      <p>Товаров в корзине: { productsList.length } (на { totalCost } BYN)</p>
-      <ListGroup>
+      <ListGroup style={{ minWidth: '300px', zIndex: '9' }}>
         {
           productsList.map(product => (
-            <ListGroup.Item action variant="success">{ product.title }  ({ product.cost } BYN) <Badge variant="danger" onClick={ removeItem } data-list-item={ product.id }>&times;</Badge></ListGroup.Item>
+            <ListGroup.Item action variant="success" key={ product.id }>
+              <Badge pill variant='primary'>{ product.title }</Badge> &times; <Badge pill variant={product.amount > 1 ? 'danger' : 'success'}>{ product.amount }</Badge> = <Badge pill variant='dark'>{ product.cost * product.amount } BYN</Badge>
+              <button type='button' className='close' aria-label='Close' variant='danger' onClick={ removeItem } data-list-item={ product.id }>
+                <span aria-hidden='true'>&times;</span>
+              </button>
+            </ListGroup.Item>
           ))
         }
       </ListGroup>
+      <p>Всего в корзине: <b>{ totalAmount }</b> товаров на <b>{ totalCost } BYN</b></p>
       <Button onClick={ emptyCart }>Очистить корзину</Button>
     </>
   )

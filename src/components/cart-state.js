@@ -4,15 +4,15 @@ import {
   Badge,
 } from 'react-bootstrap';
 
-import Layout from '../components/layout';
 
-
-const CartProductList = ({ productsList, dispatch }) => {  
-  const totalCost = productsList.reduce((res, item) => res += item.cost, 0);
+const CartProductList = ({ productsList, dispatch }) => {
+  const totalCost = productsList.reduce((res, item) => res += (item.cost * item.amount), 0);
+  const totalAmount = productsList.reduce((res, item) => res += item.amount, 0);
   
   return (
     <>
-      <Badge variant="light" pill >{ productsList.length }</Badge> <Badge variant="warning" pill >всего: { totalCost } BYN</Badge>
+      <Badge variant='info' pill >{ totalAmount }</Badge>
+      <Badge variant='warning' pill >всего: { totalCost } BYN</Badge>
     </>
   )
 };

@@ -1,5 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Card,
+} from 'react-bootstrap';
 
 import Layout from '../components/layout';
 import CartProductList from '../components/cart-product-list';
@@ -37,14 +44,40 @@ const CartPage = ({ productsList, dispatch }) => {
   }
   
   return (
-    <Layout>
-      <CartProductList productsList={ productsList } dispatch={ dispatch } />
-      <form onSubmit={ order } name='order' method='POST' data-netlify='true'>
-        <input placeholder='name' name='name' />
-        <input placeholder='phone' name='phone' />
-        <input type='hidden' name='order' />
-        <input type='submit' value='Оформить покупку' />
-      </form>
+    <Layout
+      seo={{
+        title: 'Корзина',
+        description: 'Оформление, покупки',
+    }}>
+      <Row>
+        <Col xl={ 6 } className='mt-5'>
+          <Card>
+            <Card.Body>
+              <Card.Title>Детализация</Card.Title>
+              <CartProductList productsList={ productsList } dispatch={ dispatch } />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col xl={ 6 } className='mt-5'>
+          <Card>
+            <Card.Body>
+              <Card.Title>Ваши данные</Card.Title>
+                <Form onSubmit={ order } name='order' method='POST' data-netlify='true'>
+                  <Form.Group>
+                    <Form.Control type='text' placeholder='Ваше имя' name='name' />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Control type='text' placeholder='Ваш телефон' name='phone' />
+                  </Form.Group>
+                  <Form.Control type='hidden' name='order' />
+                  <Button variant='primary' type='submit'>
+                    Оформить покупку
+                  </Button>
+                </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Layout>
   )
 };
