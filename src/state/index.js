@@ -1,4 +1,12 @@
-import { createStore as reduxCreateStore } from 'redux';
+import { createStore as reduxCreateStore, applyMiddleware } from 'redux';
+
+let local;
+let initialState;
+
+if (typeof localStorage !== 'undefined') {
+  local = localStorage.getItem('cart');
+  initialState = local ? JSON.parse(local) : [];
+}
 
 const reducer = (state = [], action) => {
   const [ ...newState ] = state;
@@ -26,6 +34,17 @@ const reducer = (state = [], action) => {
   }
 }
 
-const createStore = () => reduxCreateStore(reducer);
+//Middleware для записи в Local Storage
+const localStoreLogger = store => next => action => {
+  let result = next(action);
+  localStorage.setItem('cart', JSON.stringify(store.getState()));
+  return result;
+}
+
+const createStore = () => reduxCreateStore(
+  reducer,
+  initialState,
+  applyMiddleware(localStoreLogger)
+);
 
 export default createStore;

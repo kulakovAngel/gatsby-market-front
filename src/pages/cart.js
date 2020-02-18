@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
   Form,
   Button,
+  Alert,
   Row,
   Col,
   Card,
@@ -16,7 +17,7 @@ const encode = data => {
   let strEncoded = '';
   for (let key in data) {
     if (key === 'items' ) {
-      strEncoded += 'order=' + encodeURIComponent(data[key].map(item => `${item.title} (${item.cost} BYN)`).join(`\n`));
+      strEncoded += 'order=' + encodeURIComponent(data[key].map(item => `${item.title}: ${item.cost} BYN * ${item.amount}`).join(`\n`));
     } else {
       strEncoded += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&';
     }
@@ -26,9 +27,20 @@ const encode = data => {
 
 
 const CartPage = ({ productsList, dispatch }) => {
+  const [alert, setAlert] = useState({ type: false, message: '' });
   
   function order(e) {
     e.preventDefault();
+    
+    if (!e.target.elements['name'].value || !e.target.elements['phone'].value) {
+      setAlert({type: 'danger', message: 'Введите свои данные!'});
+      return;
+    }
+    if (!productsList.length) {
+      setAlert({type: 'danger', message: 'Корзина пуста!'});
+      return;
+    }
+    
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -39,8 +51,13 @@ const CartPage = ({ productsList, dispatch }) => {
         items: productsList,
       })
     })
-      .then(() => alert("Success!"))
-      .catch(error => alert(error));
+      .then(() => {
+        setAlert({type: 'success', message: 'Ваша заявка успешно отправлена!'});
+        dispatch({
+          type: 'EMPTY_CART',
+        });
+      })
+      .catch(error => setAlert({type: 'danger', message: 'Ошибка сервера. Попробуйте еще раз или обратитесь в техподдкржку!'}))
   }
   
   return (
@@ -49,12 +66,22 @@ const CartPage = ({ productsList, dispatch }) => {
         title: 'Корзина',
         description: 'Оформление, покупки',
     }}>
+      {
+        alert &&
+        <Row>
+          <Col>
+            <Alert variant={ alert.type } dismissible onClose={() => setAlert(false)}>
+              { alert.message }
+            </Alert>
+          </Col>
+        </Row>
+      }
       <Row>
         <Col xl={ 6 } className='mt-5'>
           <Card>
             <Card.Body>
               <Card.Title>Детализация</Card.Title>
-              <CartProductList productsList={ productsList } dispatch={ dispatch } />
+              <CartProductList productsList={ productsList } />
             </Card.Body>
           </Card>
         </Col>
@@ -64,10 +91,10 @@ const CartPage = ({ productsList, dispatch }) => {
               <Card.Title>Ваши данные</Card.Title>
                 <Form onSubmit={ order } name='order' method='POST' data-netlify='true'>
                   <Form.Group>
-                    <Form.Control type='text' placeholder='Ваше имя' name='name' />
+                    <Form.Control type='text' placeholder='Ваше имя*' name='name' />
                   </Form.Group>
                   <Form.Group>
-                    <Form.Control type='text' placeholder='Ваш телефон' name='phone' />
+                    <Form.Control type='text' placeholder='Ваш телефон*' name='phone' />
                   </Form.Group>
                   <Form.Control type='hidden' name='order' />
                   <Button variant='primary' type='submit'>
